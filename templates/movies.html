@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% set active_page = 'movies' %}
+
+{% block title %}电影TOP250排行榜{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+    /* 分页组件样式 */
+    .wl-Page {
+        width: 100%;
+        text-align: center;
+        margin: 2rem 0;
+    }
+    .wl-pagination {
+        display: inline-block;
+        margin: 0;
+        padding-left: 0;
+    }
+    .wl-pagination>li>a {
+        display: inline-block;
+        padding: 15px;
+        border: 1px solid #ccc;
+        text-decoration: none;
+        color: #3f3939;
+    }
+    .wl-pagination>li {
+        display: inline-block;
+        list-style: none;
+    }
+    .wl-pagination-bgc>li>a {
+        background-color: #f4f4f5;
+        color: #303133;
+        font-size: 12px;
+        padding: 8px;
+        border: 1px solid #f4f4f5;
+        font-weight: 900;
+    }
+    .wl-pagination-bgc .active>a {
+        background-color: #0099ff;
+        color: #fff;
+    }
+    .wl-pagination-bgc>li>a:hover {
+        background-color: #0099ff;
+        color: #fff;
+    }
+    .wl-pagination-bgc li p {
+        color: #ffffff !important;
+        margin: 0;
+    }
+    .section-title {
+    color: white;
+    }
+    .container {
+    max-width: 95%; /* 让容器宽度占满整个屏幕 */
+    padding-left: 0; /* 移除左内边距 */
+    padding-right: 0; /* 移除右内边距 */
+    }
+
+
+
+{#}#}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- 标题部分 -->
+    <div class="row mb-4">
+        <div class="col text-center">
+            <h3 class="section-title">
+               <i class="fas fa-film me-2"></i>🎬豆瓣电影TOP250排行榜
+            </h3>
+        </div>
+    </div>
+
+    <!-- 数据表格 -->
+    <section class="counts section-bg">
+        <div class="container">
+            <div class="table-responsive">
+                <table class="table table-striped ">
+                    <thead>
+                        <tr>
+                            <th style="width: 8%">排名</th>
+                            <th style="width: 10%">海报</th>
+                            <th style="width: 15%">中文名称</th>
+                            <th style="width: 15%">外文名称</th>
+                            <th style="width: 8%">评分</th>
+                            <th style="width: 10%">评分人数</th>
+                            <th>简介</th>
+                            <th style="width: 12%">其他信息</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for movie in movies %}
+                        <tr>
+                            <td>{{ movie[0] }}</td>
+                            <td>
+                                 <img src="{{ url_for('static', filename='posters/' + movie[1]) }}"
+                                     alt="{{ movie[1] }} 海报"
+                                     style="max-width: 120px; border-radius: 4px;">
+                            </td>
+                            <td><a href="{{ movie[2] }}" target="_blank">{{ movie[3] }}</a></td>
+                            <td>{{ movie[4] }}</td>
+                            <td>{{ movie[5] }}</td>
+                            <td>{{ movie[6] }}</td>
+                            <td>{{ movie[7] }}</td>
+                            <td>{{ movie[8] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 分页导航 -->
+            <nav class="wl-Page">
+                <ul class="wl-pagination wl-pagination-bgc">
+                    <li class="pre">
+                        {% if page - 1 <= 0 %}
+                        <a href="#" class="disabled">上一页</a>
+                        {% else %}
+                        <a href="{{ url_for('movies', page=page-1) }}">上一页</a>
+                        {% endif %}
+                    </li>
+                    <li class="next">
+                        {% if page >= countnum %}
+                        <a href="#" class="disabled">下一页</a>
+                        {% else %}
+                        <a href="{{ url_for('movies', page=(page + 1)) }}">下一页</a>
+                        {% endif %}
+                    </li>
+                    <li><p>总共{{ countnum }}页</p></li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<!-- 表格交互增强 -->
+<script>
+$(document).ready(function() {
+    // 为表格行添加点击效果
+    $('.table-striped tr').hover(function() {
+        $(this).css('background-color', 'rgba(0, 153, 255, 0.1)');
+    }, function() {
+        $(this).css('background-color', '');
+    });
+
+    // 分页按钮状态更新
+    $('.wl-pagination .disabled').click(function(e) {
+        e.preventDefault();
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,44 @@
+/* 页脚专用样式 */
+.footer-contact h3 {
+    color: #fff;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.contact-info p {
+    color: #c2d6ec;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.footer-links h4 {
+    color: #fff;
+    margin-bottom: 1.2rem;
+    font-size: 1.2rem;
+}
+
+.footer-links a {
+    color: #9eccf4;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+.footer-links a:hover {
+    color: #6ba3d6;
+    transform: translateX(5px);
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .footer-contact, .footer-links {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .footer-links a {
+        display: inline-block;
+        margin: 0 10px;
+    }
+}

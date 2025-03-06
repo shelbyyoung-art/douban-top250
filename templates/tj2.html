@@ -1,0 +1,304 @@
+{% extends "base.html" %}
+{% set active_page = 'tj' %}
+
+{% block title %}数据统计{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+    /* 添加容器间距 */
+    .chart-container {
+        margin-bottom: 40px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- 评分分布 -->
+    <div class="chart-container">
+        <h4 class="text-white mb-4">🎯 电影评分分布</h4>
+        <div id="main" style="height:400px"></div>
+    </div>
+
+    <!-- 类型分布 -->
+    <div class="chart-container">
+        <h4 class="text-white mb-4">🎨 电影类型分布</h4>
+        <div id="main1" style="height:400px"></div>
+    </div>
+
+    <!-- 年度趋势 -->
+    <div class="chart-container">
+        <h4 class="text-white mb-4">📅 近20年上映趋势</h4>
+        <div id="main2" style="height:400px"></div>
+    </div>
+
+    <!-- Top10年份 -->
+    <div class="chart-container">
+        <h4 class="text-white mb-4">🏆 高产年份TOP10</h4>
+        <div id="main3" style="height:400px"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='assets/js/echarts.min.js') }}"></script>
+<script type="text/javascript">
+    var dom = document.getElementById("main");
+    var myChart = echarts.init(dom);
+    var app = {};
+    var option = {
+    color: ['#5470C6'],
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: { type: 'shadow' }
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: [{
+        type: 'category',
+        data: {{ rating }},
+        axisLine: {
+            lineStyle: { color: '#FFFFFF' }
+        },
+        axisTick: {
+            lineStyle: { color: '#FFFFFF' }
+        },
+        axisLabel: {
+            color: '#FFFFFF',
+            fontSize: 12
+        }
+    }],
+    yAxis: [{
+        type: 'value',
+        axisLine: {
+            lineStyle: { color: '#FFFFFF' }
+        },
+        axisTick: {
+            lineStyle: { color: '#FFFFFF' }
+        },
+        axisLabel: {
+            color: '#FFFFFF',
+            fontSize: 12
+        },
+        splitLine: {
+            lineStyle: {
+                color: 'rgba(255,255,255,0.2)',
+                type: 'dashed'
+            }
+        }
+    }],
+    series: [{
+        name: 'num',
+        type: 'bar',
+        barWidth: '60%',
+        data: {{ num }},
+        itemStyle: {
+            borderRadius: [5, 5, 0, 0]
+        }
+    }]
+};
+
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+
+
+    var dom1 = document.getElementById("main1");
+    var myChart1 = echarts.init(dom1);
+    var app1 = {};
+    var option1 = {
+    color: ['#91CC75'],
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: { type: 'shadow' }
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: [{
+        type: 'category',
+        data: {{ filmtypes_list|tojson }},
+        axisLine: {
+            lineStyle: { color: '#FFFFFF' }
+        },
+        axisTick: {
+            lineStyle: { color: '#FFFFFF' }
+        },
+        axisLabel: {
+            color: '#FFFFFF',
+            fontSize: 12,
+            rotate: 45 // 如果标签过长可以旋转
+        }
+    }],
+    yAxis: [{
+        type: 'value',
+        axisLine: {
+            lineStyle: { color: '#FFFFFF' }
+        },
+        axisTick: {
+            lineStyle: { color: '#FFFFFF' }
+        },
+        axisLabel: {
+            color: '#FFFFFF',
+            fontSize: 12
+        },
+        splitLine: {
+            lineStyle: {
+                color: 'rgba(255,255,255,0.2)',
+                type: 'dashed'
+            }
+        }
+    }],
+    series: [{
+        name: 'num',
+        type: 'bar',
+        barWidth: '60%',
+        data: {{ filmtypes_num }},
+        itemStyle: {
+            borderRadius: [5, 5, 0, 0]
+        }
+    }]
+};
+
+    if (option1 && typeof option1 === "object") {
+        myChart1.setOption(option1, true);
+    }
+
+
+    var dom2 = document.getElementById("main2");
+    var myChart2 = echarts.init(dom2);
+    var app2 = {};
+    var option2 = {
+    color: ['#FAC858'],
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: { type: 'shadow' }
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: [{
+        type: 'category',
+        data: {{ years|tojson }},
+        axisLine: {
+            lineStyle: { color: '#FFFFFF' }
+        },
+        axisTick: {
+            lineStyle: { color: '#FFFFFF' }
+        },
+        axisLabel: {
+            color: '#FFFFFF',
+            fontSize: 12
+        }
+    }],
+    yAxis: [{
+        type: 'value',
+        axisLine: {
+            lineStyle: { color: '#FFFFFF' }
+        },
+        axisTick: {
+            lineStyle: { color: '#FFFFFF' }
+        },
+        axisLabel: {
+            color: '#FFFFFF',
+            fontSize: 12
+        },
+        splitLine: {
+            lineStyle: {
+                color: 'rgba(255,255,255,0.2)',
+                type: 'dashed'
+            }
+        }
+    }],
+    series: [{
+        name: 'num',
+        type: 'bar',
+        barWidth: '60%',
+        data: {{ years_num }},
+        itemStyle: {
+            borderRadius: [5, 5, 0, 0]
+        }
+    }]
+};
+
+    if (option2 && typeof option2 === "object") {
+        myChart2.setOption(option2, true);
+    }
+
+
+    var dom3 = document.getElementById("main3");
+    var myChart3 = echarts.init(dom3);
+    var app3 = {};
+    var option3 = {
+    color: ['#EE6666'],
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: { type: 'shadow' }
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis: [{
+        type: 'category',
+        data: {{ top10|tojson }},
+        axisLine: {
+            lineStyle: { color: '#FFFFFF' }
+        },
+        axisTick: {
+            lineStyle: { color: '#FFFFFF' }
+        },
+        axisLabel: {
+            color: '#FFFFFF',
+            fontSize: 12
+        }
+    }],
+    yAxis: [{
+        type: 'value',
+        axisLine: {
+            lineStyle: { color: '#FFFFFF' }
+        },
+        axisTick: {
+            lineStyle: { color: '#FFFFFF' }
+        },
+        axisLabel: {
+            color: '#FFFFFF',
+            fontSize: 12
+        },
+        splitLine: {
+            lineStyle: {
+                color: 'rgba(255,255,255,0.2)',
+                type: 'dashed'
+            }
+        }
+    }],
+    series: [{
+        name: 'num',
+        type: 'bar',
+        barWidth: '60%',
+        data: {{ top10_num }},
+        itemStyle: {
+            borderRadius: [5, 5, 0, 0]
+        }
+    }]
+};
+
+    if (option3 && typeof option3 === "object") {
+        myChart3.setOption(option3, true);
+    }
+</script>
+{% endblock %}
